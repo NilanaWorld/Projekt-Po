@@ -29,6 +29,6 @@ protected:
 	string data;
 	typTerm rodzaj;
 	string tytul;
-
+	int kolor;
 };
 #endif // !defined(EA_F85C05B0_EB58_46b7_AE12_36625D3ED35D__INCLUDED_)
