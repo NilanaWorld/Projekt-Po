@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstring>
 #include <filesystem>
+#include <stdlib.h>
 
 #include "AplikacjaTerminarz.h"
 #include "Kalendarz.h"
@@ -31,23 +32,43 @@
 using namespace std;
 
 
-
 int main()
 {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
+    fstream logo;
+    string line;
+    int k = 0;
+    logo.open("nowy2.txt", ios::in);
+    if (logo.good())
+    {
+        while (!logo.eof()) {
+            getline(logo, line);
+            cout << line<<endl;
+            if(k>18) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+            Sleep(50);
+            k++;
+        };
+        logo.close();
+    }
+    else {
+        cout << "blad wczytywania logo\n";
+    }
+    //system("pause");
+
     //tworzenie pliku konta i folderu z kontami
     fstream fp;
     fp.open("konta.txt", ios::app);
     fp.close();
 
-    if (mkdir("./Konta") == -1)
-        cerr << " Error : " << strerror(errno) << endl;
-
-    else
-        cout << "File Created\n";
-
+    if (mkdir("./Konta") == -1){
+        //cerr << " Error : " << strerror(errno) << endl;
+    }
+    else{
+        //cout << "File Created\n";
+    }
     //
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
-    cout << "Witamy w aplikacji KalenEX!\n";
+    cout << "Witamy w aplikacji KalendEX!\n";
 
 
     //arrow detection - WIP
