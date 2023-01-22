@@ -19,5 +19,6 @@ int main()
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
     cout << "Hello World!\n";
+    cout << "test";
     return 0;
 }
