@@ -23,6 +23,7 @@ public:
 
 	Termin(string data, string tytul, typTerm rodzaj);
 	void edytujDate(string nowaData);
+	string dajTytul();
 	virtual void wyswietl();
 
 protected:
