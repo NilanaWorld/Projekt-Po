@@ -33,7 +33,7 @@ public:
 
 private:
 	string nazwa;
-	vector <Termin*> Terminy;
+	vector <Termin*> *Terminy;
 
 };
 #endif // !defined(EA_20A53B12_0336_465a_B15E_02961E3D4FD6__INCLUDED_)

@@ -14,7 +14,9 @@ using namespace std;
 
 
 AplikacjaTerminarz::AplikacjaTerminarz(){
-
+	this->Kalendarze = new vector <Kalendarz*>();
+	Kalendarz* k1 = new Kalendarz("podstawowy");
+	this->Kalendarze->push_back(k1);
 }
 
 
@@ -32,24 +34,27 @@ AplikacjaTerminarz::AplikacjaTerminarz(string login, string haslo){
 }
 
 
-void AplikacjaTerminarz::dodajKalendarz(string nazwa){
-
+void AplikacjaTerminarz::dodajKalendarz(Kalendarz* nazwa){
+	this->Kalendarze->push_back(nazwa);
 }
 
 
-void AplikacjaTerminarz::usunKalendarz(string nazwa){
+void AplikacjaTerminarz::usunKalendarz(Kalendarz* nazwa){
 
 }
 
 
 Kalendarz* AplikacjaTerminarz::wybierzKalendarz(string nazwa){
 
-	return  NULL;
+	return  nullptr;
 }
 
 
 void AplikacjaTerminarz::wyswietlKalendarze(){
-
+	for (int i = 0; i < Kalendarze->size(); i++)
+	{
+		((*Kalendarze)[i])->wyswietlKalendarz();
+	}
 }
 
 

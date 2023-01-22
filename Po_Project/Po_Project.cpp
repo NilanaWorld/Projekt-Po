@@ -16,9 +16,11 @@ using namespace std;
 
 int main()
 {
-
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
-    cout << "Hello World!\n";
-    cout << "test";
+
+    AplikacjaTerminarz* app = new AplikacjaTerminarz;
+    Kalendarz* k1 = new Kalendarz("imprezy");
+    app->dodajKalendarz(k1);
+    app->wyswietlKalendarze();
     return 0;
 }

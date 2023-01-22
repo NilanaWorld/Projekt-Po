@@ -16,7 +16,10 @@ using namespace std;
 
 
 Termin::Termin(){
-
+	this->data = "12.12.2012";
+	this->tytul = zadanie;
+	this->kolor = 1;
+	this->rodzaj = zadanie;
 }
 
 
@@ -30,7 +33,10 @@ Termin::~Termin(){
 
 
 Termin::Termin(string data, string tytul, typTerm rodzaj){
-
+	this->data = data;
+	this->tytul = tytul;
+	this->rodzaj = rodzaj;
+	this->kolor = kolor;
 }
 
 

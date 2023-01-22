@@ -28,7 +28,8 @@ Kalendarz::~Kalendarz(){
 
 
 Kalendarz::Kalendarz(string nazwa){
-
+	this->nazwa = nazwa;
+	this->Terminy = new vector<Termin*>();
 }
 
 
@@ -54,7 +55,7 @@ Termin* Kalendarz::wybierzTermin(string nazwa){
 
 
 void Kalendarz::wyswietlKalendarz(){
-
+	cout << this->nazwa << "\n";
 }
 
 

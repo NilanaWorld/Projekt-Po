@@ -25,15 +25,15 @@ public:
 	//Kalendarz *m_Kalendarz;
 
 	AplikacjaTerminarz(string login, string haslo);
-	void dodajKalendarz(string nazwa);
-	void usunKalendarz(string nazwa);
+	void dodajKalendarz(Kalendarz* nazwa);
+	void usunKalendarz(Kalendarz* nazwa);
 	Kalendarz* wybierzKalendarz(string nazwa);
 	void wyswietlKalendarze();
 	void wyswietlKonto();
 
 private:
 	string haslo;
-	vector <Kalendarz*> Kalendarze;
+	vector <Kalendarz*> *Kalendarze;
 	string login;
 
 };
