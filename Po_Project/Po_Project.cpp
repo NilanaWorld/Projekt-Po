@@ -20,7 +20,11 @@ int main()
 
     AplikacjaTerminarz* app = new AplikacjaTerminarz;
     Kalendarz* k1 = new Kalendarz("imprezy");
+    Termin* t1 = new Termin();
     app->dodajKalendarz(k1);
-    app->wyswietlKalendarze();
+    Spotkanie* s1 = new Spotkanie();
+    k1->dodajTermin(s1);
+    k1->wyswietlTerminy();
+    app->wyswietlKonto();
     return 0;
 }

@@ -17,8 +17,8 @@ using namespace std;
 
 Termin::Termin(){
 	this->data = "12.12.2012";
-	this->tytul = zadanie;
-	this->kolor = 1;
+	this->tytul = "kartkowka";
+	this->kolor = 0;
 	this->rodzaj = zadanie;
 }
 
@@ -31,21 +31,23 @@ Termin::~Termin(){
 
 
 
-
 Termin::Termin(string data, string tytul, typTerm rodzaj){
 	this->data = data;
 	this->tytul = tytul;
 	this->rodzaj = rodzaj;
-	this->kolor = kolor;
+	this->kolor = 0;
 }
 
+string Termin::dajTytul(){
+	return this->tytul;
+}
 
 void Termin::edytujDate(string nowaData){
-
+	this->data = nowaData;
 }
 
-
-void Termin::wyswietl(){
-
-	return;
+ void Termin::wyswietl(){
+	cout <<"Termin: " << this->tytul << "\n";
+	cout <<"data: " << this->data << "\n";
+	cout <<"rodzaj: " << this->rodzaj<< "\n";
 }

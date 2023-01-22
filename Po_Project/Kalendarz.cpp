@@ -14,7 +14,8 @@ using namespace std;
 
 
 Kalendarz::Kalendarz(){
-
+	this->nazwa = "Podstawowy";
+	this->Terminy = new vector<Termin*>();
 }
 
 
@@ -33,13 +34,12 @@ Kalendarz::Kalendarz(string nazwa){
 }
 
 
-void Kalendarz::dodajTermin(string opis, string data, string tytul, string miejsce){
-
+void Kalendarz::dodajTermin(Termin* termin){
+	this->Terminy->push_back(termin);
 }
 
-
-void Kalendarz::dodajTermin(string data, string opis, string tytul){
-
+void Kalendarz::dodajTermin(string nazwa,Termin* termin) {
+	this->Terminy->push_back(termin);
 }
 
 
@@ -49,8 +49,11 @@ void Kalendarz::usunTermin(){
 
 
 Termin* Kalendarz::wybierzTermin(string nazwa){
-
-	return  NULL;
+	for (int i = 0; i < this->Terminy->size(); i++)
+	{
+		if (((*Terminy)[i])->dajTytul() == nazwa) return (*Terminy)[i];
+	}
+	return  nullptr;
 }
 
 
@@ -60,5 +63,12 @@ void Kalendarz::wyswietlKalendarz(){
 
 
 void Kalendarz::wyswietlTerminy(){
+	for (int i = 0; i < this->Terminy->size(); i++)
+	{
+		((*Terminy)[i])->wyswietl();
+	}
+}
 
+string Kalendarz::dajNazwe() {
+	return this->nazwa;
 }

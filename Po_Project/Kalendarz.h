@@ -24,12 +24,13 @@ public:
 	Termin *m_Termin;
 
 	Kalendarz(string nazwa);
-	void dodajTermin(string opis, string data, string tytul, string miejsce);
-	void dodajTermin(string data, string opis, string tytul);
+	void dodajTermin(Termin* termin);
+	void dodajTermin(string nazwa, Termin* termin);
 	void usunTermin();
 	Termin* wybierzTermin(string nazwa);
 	void wyswietlKalendarz();
 	void wyswietlTerminy();
+	string dajNazwe();
 
 private:
 	string nazwa;
