@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="AplikacjaTerminarz.h" />
     <ClInclude Include="Kalendarz.h" />
+    <ClInclude Include="Konto.h" />
     <ClInclude Include="Spotkanie.h" />
     <ClInclude Include="Termin.h" />
     <ClInclude Include="typStanu.h" />
