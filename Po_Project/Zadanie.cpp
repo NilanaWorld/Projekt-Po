@@ -14,8 +14,9 @@
 using namespace std;
 
 
-Zadanie::Zadanie(){
-
+Zadanie::Zadanie() : Termin::Termin(){
+	this->opis = "default";
+	this->stan = zaplanowany;
 }
 
 
@@ -28,16 +29,21 @@ Zadanie::~Zadanie(){
 
 
 
-Zadanie::Zadanie(string opis){
-
+Zadanie::Zadanie(string opis) : Termin::Termin(){
+	this->stan = zaplanowany;
+	this->opis = opis;
 }
 
 
 void Zadanie::wyswietl(){
-
+	cout << "Zadanie: " << this->tytul << "\n";
+	cout << "data: " << this->data << "\n";
+	cout << "rodzaj: " << this->rodzaj << "\n";
+	cout << "stan: " << this->stan << "\n";
+	cout << "opis: " << this->opis << "\n";
 }
 
 
 void Zadanie::zmienStan(typStanu stan){
-
+	this->stan = stan;
 }
