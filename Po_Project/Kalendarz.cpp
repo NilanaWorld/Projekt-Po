@@ -87,7 +87,18 @@ void Kalendarz::dodajTermin() {
 }
 
 
-void Kalendarz::usunTermin(){
+void Kalendarz::usunTermin(string nazwa){
+	Termin* r = nullptr;
+	auto it = find_if(Terminy->begin(), Terminy->end(), [&](Termin* p)
+		{
+			if (nazwa == p->dajTytul())
+			{
+				r = p;
+				return true;
+			}
+		return false; });
+	Terminy->erase(it);
+		
 	//1.usuwa z listy
 	//2. ios::out powinno go usunac z pliku
 	//3. potrzeba funkcji zapisz

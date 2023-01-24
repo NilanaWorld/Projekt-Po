@@ -147,7 +147,19 @@ void AplikacjaTerminarz::dodajKalendarz(string nazwa,string login){
 }
 
 
-void AplikacjaTerminarz::usunKalendarz(Kalendarz* nazwa){
+void AplikacjaTerminarz::usunKalendarz(string nazwa){
+	Kalendarz* r = nullptr;
+	auto it = find_if(Kalendarze->begin(), Kalendarze->end(), [&](Kalendarz* p)
+		{
+			if (nazwa == p->dajNazwe())
+			{
+				r = p;
+				return true;
+			}
+	return false; });
+	Kalendarze->erase(it);
+
+
 	//1.usuwa z listy
 	//2.usuwa plik
 }

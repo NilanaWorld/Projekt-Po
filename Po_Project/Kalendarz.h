@@ -25,7 +25,7 @@ public:
 	Kalendarz(string nazwa,string login);
 	void dodajTermin(Termin* termin);
 	void dodajTermin();
-	void usunTermin();
+	void usunTermin(string nazwa);
 	Termin* wybierzTermin(string nazwa);
 	void wyswietlKalendarz();
 	void wyswietlTerminy();

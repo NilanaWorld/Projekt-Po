@@ -26,7 +26,7 @@ public:
 
 	AplikacjaTerminarz(string login, string haslo);
 	void dodajKalendarz(string nazwa,string login);
-	void usunKalendarz(Kalendarz* nazwa);
+	void usunKalendarz(string nazwa);
 	Kalendarz* wybierzKalendarz(string nazwa);
 	void wyswietlKalendarze();
 	void wyswietlKonto();
