@@ -45,8 +45,7 @@ AplikacjaTerminarz::AplikacjaTerminarz(string login, string haslo){
 	this->haslo = haslo;
 
 	this->Kalendarze = new vector <Kalendarz*>();
-	Kalendarz* k1 = new Kalendarz("Default",login);
-	this->Kalendarze->push_back(k1);
+	Kalendarz* k1;
 
 	fstream fpDKal;
 	string path2 = "./Konta/" + login + "/Default.txt";
@@ -58,16 +57,79 @@ AplikacjaTerminarz::AplikacjaTerminarz(string login, string haslo){
 	//lista plikow w folderze
 	path2 = "./Konta/" + login + "/";
 	string nazwa;
+	
 
 	//path path{ u8path(u8"bruh.txt") };
 	//string path_string{ path.u8string() };
 
+	//lista kalendarzy
 	for (const auto& entry : directory_iterator(path2))
 	{
-		//nazwa = s(entry.path());
-		//(*Kalendarze)[i]=
-		cout << entry.path() << endl;
+		nazwa = entry.path().generic_string();
+		path2 = entry.path().generic_string();
+		pathKal = path2.c_str();
+
+		cout << entry.path().generic_string() << endl;
+		nazwa = nazwa.substr(nazwa.rfind("/")+1,nazwa.size());
+		nazwa.pop_back();
+		nazwa.pop_back();
+		nazwa.pop_back();
+		nazwa.pop_back();
+
+		cout << "nazwa: " << nazwa<<endl;
+
+		k1 = new Kalendarz(nazwa, login);
+		this->Kalendarze->push_back(k1);
+
+		//lista terminow
+		string linia,tytul,data,opis,miejsce;
+		int typ,stan;
+		int poz1, poz2;
+
+		fpDKal.open(pathKal, ios::in);//otwieranie kalendarza i pobieranie tresci z niego
+		if (fpDKal.good())
+		{
+			while (fpDKal.eof())
+			{
+				getline(fpDKal, linia);
+				typ = linia[0];
+				poz1 = posStr(linia, ',', 1);
+				poz2 = posStr(linia, ',', 2);
+				tytul = linia.substr(poz1 + 1, poz2 - poz1);
+				cout << "tytul: " << tytul << endl;
+				poz1 = posStr(linia, ',', 2);
+				poz2 = posStr(linia, ',', 3);
+				data = linia.substr(poz1 + 1, poz2 - poz1);
+				cout << "data: " << data << endl;
+				poz1 = posStr(linia, ',', 3);
+				poz2 = posStr(linia, ',', 4);
+				opis = linia.substr(poz1 + 1, poz2 - poz1);
+				cout << "opis: " << opis << endl;
+
+
+				if (typ == 0)
+				{
+					poz1 = posStr(linia, ',', 5);
+					poz2 = linia.size();
+					opis = linia.substr(poz1 + 1, poz2);
+					opis.pop_back();
+					cout << "opis: " << opis << endl;
+				}
+				else
+				{
+					poz1 = posStr(linia, ',', 5);
+					poz2 = linia.size();
+					stan = (int)linia.substr(poz1 + 1, poz2).c_str();
+					
+					cout << "stan: " << stan << endl;
+				}
+			}
+		}
+
+		fpDKal.close();
 	}
+
+
 	
 
 }
@@ -86,7 +148,8 @@ void AplikacjaTerminarz::dodajKalendarz(string nazwa,string login){
 
 
 void AplikacjaTerminarz::usunKalendarz(Kalendarz* nazwa){
-
+	//1.usuwa z listy
+	//2.usuwa plik
 }
 
 

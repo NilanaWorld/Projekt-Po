@@ -88,7 +88,9 @@ void Kalendarz::dodajTermin() {
 
 
 void Kalendarz::usunTermin(){
-
+	//1.usuwa z listy
+	//2. ios::out powinno go usunac z pliku
+	//3. potrzeba funkcji zapisz
 }
 
 

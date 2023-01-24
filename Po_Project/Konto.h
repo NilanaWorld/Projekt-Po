@@ -1,6 +1,10 @@
 #pragma once
-//#pragma warning(disable : 4996)
+#pragma warning(disable : 4996)
 #define _CRT_SECURE_NO_WARNINGS
+#define _CRT_NONSTDC_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS_GLOBALS
+#define _SCL_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <fstream>
 #include <conio.h>
@@ -29,7 +33,7 @@ using namespace std;
 
 extern AplikacjaTerminarz* app;
 
-void logo() {
+inline void logo() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
     fstream logo;
     string line;
@@ -51,7 +55,7 @@ void logo() {
     }
 }
 
-bool sprawdzanieKont(string login)
+inline bool sprawdzanieKont(string login)
 {
     string test;
     fstream fp;
@@ -77,7 +81,7 @@ bool sprawdzanieKont(string login)
     }
 }
 
-bool sprawdzanieHasla(string login, string haslo)
+inline bool sprawdzanieHasla(string login, string haslo)
 {
     string testLogin;
     string testHaslo;
@@ -125,7 +129,7 @@ bool sprawdzanieHasla(string login, string haslo)
     }
 }
 
-void tworzenieKonta()
+inline void tworzenieKonta()
 {
     string login, haslo;
     int k = 0;
@@ -162,13 +166,32 @@ void tworzenieKonta()
     }
 }
 
-string convertToString(char* a)
+inline string convertToString(char* a)
 {
     string s(a);
     return s;
 }
 
-void logowanie()
+inline int posStr(string wyraz,char znak,int wystapienie)
+{
+    int flag = 0;
+    bool czy_znak = false;
+
+    for (int i = 0; i < wyraz.size(); i++)
+    {
+        if (wyraz[i] == znak){
+            czy_znak = true;
+            flag++;
+        }
+        else
+            czy_znak = false;
+
+        if (flag == wystapienie && czy_znak) return i;
+    }
+    return -1;
+}
+
+inline void logowanie()
 {
     string login, haslo;
     int k = 0;
@@ -204,7 +227,7 @@ void logowanie()
     app = new AplikacjaTerminarz(login, haslo);
 }
 
-char wybor()//key detection - WIP
+inline char wybor()//key detection - WIP
 {
     int c, ex;
     c = getch();
@@ -251,7 +274,7 @@ char wybor()//key detection - WIP
     return option;
 }
 
-void opcje(int opcja)
+inline void opcje(int opcja)
 {
     system("CLS");
     switch (opcja)
@@ -277,7 +300,7 @@ void opcje(int opcja)
     system("CLS");
 }
 
-void menuLogowania()
+inline void menuLogowania()
 {
     char option = 'u';
     int flag = 0;
@@ -317,7 +340,7 @@ void menuLogowania()
     }
 }
 
-void menuTermin(Termin* t1)
+inline void menuTermin(Termin* t1)
 {
     int opcja = 0;
     while (opcja != KEY_ENTER)
@@ -364,7 +387,7 @@ void menuTermin(Termin* t1)
     }
 }
 
-void menuKalendarz(Kalendarz* k1)
+inline void menuKalendarz(Kalendarz* k1)
 {
     int opcja = 0;
     while (opcja != KEY_ENTER)
@@ -422,8 +445,7 @@ void menuKalendarz(Kalendarz* k1)
     }
 }
 
-
-void menuTerminarz()
+inline void menuTerminarz()
 {
     int opcja=0;
     while (opcja != KEY_ENTER)

@@ -54,6 +54,7 @@ int main()
     cout << "Witamy w aplikacji KalendEX!\n";
     system("pause");
     string login;
+
     menuLogowania();
     
     
