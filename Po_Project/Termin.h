@@ -25,6 +25,7 @@ public:
 	void edytujDate(string nowaData);
 	string dajTytul();
 	virtual void wyswietl();
+	int getType();
 
 protected:
 	string data;

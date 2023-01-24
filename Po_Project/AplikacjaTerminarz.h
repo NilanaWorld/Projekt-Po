@@ -25,11 +25,12 @@ public:
 	//Kalendarz *m_Kalendarz;
 
 	AplikacjaTerminarz(string login, string haslo);
-	void dodajKalendarz(Kalendarz* nazwa);
+	void dodajKalendarz(string nazwa,string login);
 	void usunKalendarz(Kalendarz* nazwa);
 	Kalendarz* wybierzKalendarz(string nazwa);
 	void wyswietlKalendarze();
 	void wyswietlKonto();
+	string getLogin();
 
 private:
 	string haslo;

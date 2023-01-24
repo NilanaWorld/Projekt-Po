@@ -37,10 +37,10 @@ Zadanie::Zadanie(string opis) : Termin::Termin(){
 
 void Zadanie::wyswietl(){
 	cout << "Zadanie: " << this->tytul << "\n";
-	cout << "data: " << this->data << "\n";
-	cout << "rodzaj: " << this->rodzaj << "\n";
-	cout << "stan: " << this->stan << "\n";
-	cout << "opis: " << this->opis << "\n";
+	cout << "Data: " << this->data << "\n";
+	cout << "Rodzaj: " << this->rodzaj << "\n";
+	cout << "Stan: " << this->stan << "\n";
+	cout << "Opis: " << this->opis << "\n";
 }
 
 

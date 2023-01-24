@@ -48,6 +48,11 @@ void Termin::edytujDate(string nowaData){
 
  void Termin::wyswietl(){
 	cout <<"Termin: " << this->tytul << "\n";
-	cout <<"data: " << this->data << "\n";
-	cout <<"rodzaj: " << this->rodzaj<< "\n";
+	cout <<"Data: " << this->data << "\n";
+	cout <<"Rodzaj: " << this->rodzaj<< "\n";
 }
+
+ int Termin::getType()
+ {
+	 return this->rodzaj;
+ }

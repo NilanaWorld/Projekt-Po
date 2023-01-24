@@ -20,7 +20,7 @@ class Spotkanie : public Termin
 public:
 	virtual ~Spotkanie();
 
-	Spotkanie();
+	Spotkanie(string miejsce,string opis);
 	void wyswietl();
 
 private:

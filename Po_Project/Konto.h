@@ -1,4 +1,5 @@
 #pragma once
+//#pragma warning(disable : 4996)
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
@@ -10,12 +11,45 @@
 #include <cstring>
 #include <direct.h>
 
+#include "Zadanie.h";
+#include "Spotkanie.h";
+
 #define ErrColor 4
 #define ConsColor 3
 #define AcceptColor 2
 
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+#define KEY_ENTER 13
+#define KEY_ESC 27
+
 using namespace std;
 
+extern AplikacjaTerminarz* app;
+
+void logo() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
+    fstream logo;
+    string line;
+    int k = 0;
+    logo.open("nowy2.txt", ios::in);
+    if (logo.good())
+    {
+        while (!logo.eof()) {
+            getline(logo, line);
+            cout << line << endl;
+            if (k > 18) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+            Sleep(50);
+            k++;
+        };
+        logo.close();
+    }
+    else {
+        cout << "blad wczytywania logo\n";
+    }
+}
 
 bool sprawdzanieKont(string login)
 {
@@ -95,6 +129,7 @@ void tworzenieKonta()
 {
     string login, haslo;
     int k = 0;
+    printf("REJESTRACJA\n\n");
     do
     {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ErrColor);
@@ -106,30 +141,17 @@ void tworzenieKonta()
 
     } while (sprawdzanieKont(login));
 
-    fstream fp,fpDKal;
+    fstream fp;
     fp.open("konta.txt", ios::app);
 
     if (fp.good())
     {
         cout << "Haslo: "; cin >> haslo;
         fp << login << "," << haslo << "\n";
-        
-        string core = ".\\Konta\\";
-        core = core + login;
-        wstring temp = wstring(core.begin(), core.end());
-        string path2 = "./Konta/" + login + "/Default.txt";//tworzenie domyslnego kalendarza
-        const char* pathKal = path2.c_str();
-
-        LPCWSTR path = temp.c_str();
-        CreateDirectory(path, NULL);//zrob ze jak folder sie nie zrobi to usuwa konto uzytkowanika
-
-        fpDKal.open(pathKal,ios::app);//tworzenie domyslnego kalendarza
-        fpDKal.close();
-
+        fp.close();
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), AcceptColor);
         cout << "Konto zostalo utworzone pomyslnie\n";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
-        fp.close();
     }
     else
     {
@@ -140,10 +162,17 @@ void tworzenieKonta()
     }
 }
 
+string convertToString(char* a)
+{
+    string s(a);
+    return s;
+}
+
 void logowanie()
 {
     string login, haslo;
     int k = 0;
+    printf("LOGOWANIE\n\n");
     do
     {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ErrColor);
@@ -153,8 +182,295 @@ void logowanie()
         k++;
     } while (!sprawdzanieKont(login));
 
+    char* pw = (char*)malloc(sizeof(char)*50);
+    int x = 0;
+    int intZnak=0;
     do
     {
-        cout << "Haslo: "; cin >> haslo;
+        x = 0;
+        cout << "Haslo: ";
+        while (intZnak != KEY_ENTER)
+        {
+            intZnak = (char)getch();
+            pw[x] = (char)intZnak;
+            printf("*");
+            x++;
+        }
+        pw[x - 1] = '\0';
+        cout << endl;
+        haslo = convertToString(pw);
     } while (!sprawdzanieHasla(login, haslo));
+    
+    app = new AplikacjaTerminarz(login, haslo);
 }
+
+char wybor()//key detection - WIP
+{
+    int c, ex;
+    c = getch();
+    char option;
+
+    switch (c)
+    {
+    case KEY_ENTER:
+        //cout << endl << "Enter" << endl;
+        option = 'e';
+        ex = c;
+        break;
+    case KEY_ESC:
+        //cout << endl << "Esc" << endl;
+        option = 'x';
+        ex = c;
+        break;
+    default:
+    {
+        switch (ex = getch())
+        {
+        case KEY_UP:
+            //cout << endl << "Up" << endl;//key up
+            option='u';
+            break;
+        case KEY_DOWN:
+            //cout << endl << "Down" << endl;   // key down
+            option='d';
+            break;
+        case KEY_LEFT:
+            //cout << endl << "Left" << endl;  // key left
+            break;
+        case KEY_RIGHT:
+            //cout << endl << "Right" << endl;  // key right
+            break;
+        default:
+            //cout << endl << (char)ex << endl;  // not arrow
+            break;
+        }
+    }
+    break;
+    }
+    //printf("key = %02x\n", ex);
+    return option;
+}
+
+void opcje(int opcja)
+{
+    system("CLS");
+    switch (opcja)
+    {
+    case 0:
+        logowanie();
+        break;
+    case 1:
+        tworzenieKonta();
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    default:
+        break;
+    }
+    system("pause");
+    system("CLS");
+}
+
+void menuLogowania()
+{
+    char option = 'u';
+    int flag = 0;
+    int testOption = 0;
+
+    while (option != 'x')
+    {
+        system("CLS");
+        switch (abs(flag) % 2)
+        {
+        case 0:
+        {
+            printf("Logowanie <\nRejestracja\n");
+            break;
+        }
+        case 1:
+            printf("Logowanie\nRejestracja <\n");
+            break;
+        default:
+            break;
+        }
+        if (option == 'e')
+        {
+            opcje(abs(flag) % 2);
+            if (abs(flag) % 2 == 0) {
+                break;
+            }
+            else {
+                option = 'u';
+                flag = 0;
+                continue;
+            }
+        }
+        option = wybor();
+        if (option == 'u') flag++;
+        else if (option == 'd')flag--;
+    }
+}
+
+void menuTermin(Termin* t1)
+{
+    int opcja = 0;
+    while (opcja != KEY_ENTER)
+    {
+        system("CLS");
+        cout << "0-Edytuj date\n";
+        cout << "1-Wyswietl termin\n";
+        if(t1->getType()==1) cout << "2-Zmien stan\n\n";
+        cin >> opcja;
+        cout << "\n\n";
+        string nowaData;
+        int typ;
+
+        switch (opcja)
+        {
+        case 0:
+        {
+            cout << "Nowa data: "; cin >> nowaData;
+            t1->edytujDate(nowaData);
+            break;
+        }
+        case 1:
+        {
+            if (t1->getType() == 0)
+                ((Spotkanie*)t1)->wyswietl();
+            else
+                ((Zadanie*)t1)->wyswietl();
+            break;
+        }
+        case 2:
+        {
+            cout << "Nowy stan: \n";
+            cout << "0-zaplanowany \n";
+            cout << "1-zrealizowany\n";
+            cout << "2-anulowany\n";
+
+            cin >> typ;
+            ((Zadanie*)t1)->zmienStan((typStanu)typ);
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}
+
+void menuKalendarz(Kalendarz* k1)
+{
+    int opcja = 0;
+    while (opcja != KEY_ENTER)
+    {
+        system("CLS");
+        cout << "0-Dodaj termin\n";
+        cout << "1-Wybierz termin\n";
+        cout << "2-Wyswietl terminy\n";
+        cout << "3-Usun termin\n\n";
+        cout << "4-Usun termin\n\n";
+        cin >> opcja;
+        cout << "\n\n";
+        string nazwaKal;
+        string nazwaTerm;
+
+        switch (opcja)
+        {
+        case 0:
+        {
+            k1->dodajTermin();
+            break;
+        }
+        case 1:
+        {
+            cout << "Nazwa terminu: "; cin >> nazwaTerm;
+            Termin* t1 = k1->wybierzTermin(nazwaTerm);
+            if (t1 != nullptr) {
+
+            }
+            else {
+                cout << "Wybrany termin nie istnieje\n";
+            }
+            system("pause");
+            break;
+        }
+        case 2:
+        {
+            k1->wyswietlTerminy();
+            system("pause");
+            break;
+        }
+        case 3:
+        {
+            k1->wyswietlKalendarz();
+            system("pause");
+            break;
+        }
+        case 4:
+        {
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}
+
+
+void menuTerminarz()
+{
+    int opcja=0;
+    while (opcja != KEY_ENTER)
+    {
+        system("CLS");
+        cout << "0-Dodaj kalendarz\n";
+        cout << "1-Wybierz kalendarz\n";
+        cout << "2-Wyswietl kalendarze\n";
+        cout << "3-Usun kalendarz\n\n";
+        cin >> opcja;
+        cout << "\n\n";
+        string nazwa;
+
+        switch (opcja)
+        {
+        case 0:
+        {
+            cout << "Nazwa kalendarza: "; cin >> nazwa;
+            app->dodajKalendarz(nazwa, app->getLogin());
+            break;
+        }
+        case 1:
+        {
+            cout << "Nazwa kalendarza: "; cin >> nazwa;
+            Kalendarz* k1 = (app->wybierzKalendarz(nazwa));
+            if (k1 != nullptr){
+                menuKalendarz(k1);
+            }
+            else{
+                cout << "Wybrany kalendarz nie istnieje\n";
+            }
+            system("pause");
+            break;
+        }
+        case 2:
+        {
+            app->wyswietlKalendarze();
+            system("pause");
+            break;
+        }
+        case 3:
+        {
+            break;
+        }
+        default:
+            break;
+        }
+    }
+}
+
