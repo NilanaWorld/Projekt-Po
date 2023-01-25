@@ -1,0 +1,2 @@
+0,kolos,2023/05/05,fizyka,wat
+1,posprzatac,dzis,nwm,0
