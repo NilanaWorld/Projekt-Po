@@ -15,6 +15,7 @@
 #include <vector>
 #include <cstring>
 #include <experimental/filesystem>
+#include <direct.h>
 
 #include "Zadanie.h";
 #include "Spotkanie.h";
@@ -182,6 +183,14 @@ inline void tworzenieKonta()
         cout << "Haslo: "; cin >> haslo;
         fp << login << "," << haslo << "\n";
         fp.close();
+        string path = "./Konta/" + login;
+        const char* path1 = path.c_str();
+        if (mkdir(path1) == -1) {
+            //cerr << " Error : " << strerror(errno) << endl;
+        }
+        else {
+            //cout << "File Created\n";
+        }
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), AcceptColor);
         cout << "Konto zostalo utworzone pomyslnie\n";
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
@@ -469,12 +478,14 @@ inline void menuKalendarz(Kalendarz* k1)
         }
         case 2:
         {
+            cout << "TERMINY: \n\n";
             k1->wyswietlTerminy();
             system("pause");
             break;
         }
         case 3:
         {
+            cout << "Nazwa kalendarza: \n";
             k1->wyswietlKalendarz();
             system("pause");
             break;

@@ -153,7 +153,7 @@ void Kalendarz::usunTermin(string nazwa1) {
 				}
 
 			}
-			cout << "coreF: " << coreFinal << endl;
+			//cout << "coreF: " << coreFinal << endl;
 
 			KalPath = coreFinal + ".\\Konta\\" + login + "\\" + nazwa + ".txt";
 			TmpPath = coreFinal + ".\\Konta\\" + login + "\\tmp.txt";
