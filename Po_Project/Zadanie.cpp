@@ -29,7 +29,7 @@ Zadanie::~Zadanie(){
 
 
 
-Zadanie::Zadanie(string opis) : Termin::Termin(){
+Zadanie::Zadanie(string tytul,string data,string opis) : Termin::Termin(data,tytul,zadanie) {
 	this->stan = zaplanowany;
 	this->opis = opis;
 }
@@ -40,7 +40,7 @@ void Zadanie::wyswietl(){
 	cout << "Data: " << this->data << "\n";
 	cout << "Rodzaj: " << this->rodzaj << "\n";
 	cout << "Stan: " << this->stan << "\n";
-	cout << "Opis: " << this->opis << "\n";
+	cout << "Opis: " << this->opis << "\n\n";
 }
 
 

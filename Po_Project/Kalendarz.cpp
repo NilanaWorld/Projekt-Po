@@ -10,6 +10,7 @@
 #include "Termin.h"
 #include "Zadanie.h"
 #include "typStanu.h"
+#include "Konto.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -36,7 +37,14 @@ Kalendarz::Kalendarz(string nazwa,string login){
 }
 
 
-void Kalendarz::dodajTermin(Termin* termin){
+void Kalendarz::dodajTermin(int typ,string tytul,string data,string opis,string miejsce){//Spotkanie
+	Termin* termin = new Spotkanie(tytul, data, opis, miejsce);
+	this->Terminy->push_back(termin);
+}
+
+void Kalendarz::dodajTermin(int typ, string tytul, string data, string opis, typStanu stan) {//Zadanie
+	Termin* termin=new Zadanie(tytul, data, opis);
+	((Zadanie*)termin)->zmienStan(stan);
 	this->Terminy->push_back(termin);
 }
 
@@ -58,12 +66,12 @@ void Kalendarz::dodajTermin() {
 	case 0://Spotkanie
 	{
 		cout << "Miejsce: "; cin >> miejsce;
-		termin = new Spotkanie(miejsce, opis);
+		termin = new Spotkanie(tytul,data,opis,miejsce);
 		break;
 	}
 	case 1://Zadanie
 	{
-		termin = new Zadanie(opis);
+		termin = new Zadanie(tytul,data,opis);
 		break;
 	}
 	default:
@@ -87,21 +95,90 @@ void Kalendarz::dodajTermin() {
 }
 
 
-void Kalendarz::usunTermin(string nazwa){
+void Kalendarz::usunTermin(string nazwa1) {
+	//1.usuwa z listy
+	bool flag = false;
 	Termin* r = nullptr;
 	auto it = find_if(Terminy->begin(), Terminy->end(), [&](Termin* p)
 		{
-			if (nazwa == p->dajTytul())
+			if (nazwa1 == p->dajTytul())
 			{
 				r = p;
+				flag = true;
 				return true;
 			}
-		return false; });
+			return false; });
 	Terminy->erase(it);
-		
-	//1.usuwa z listy
-	//2. ios::out powinno go usunac z pliku
-	//3. potrzeba funkcji zapisz
+	if (flag == false)
+	{
+		cout << "Plik nie istnieje\n";
+	}
+	else
+	{
+		fstream fp, tmp;
+		string line, nazwa2;
+		int n = nazwa1.length();
+		string KalPath = "./Konta/" + login + "/" + nazwa + ".txt";
+		string TmpPath = "./Konta/" + login + "/tmp.txt";
+		const char* KalPath1 = KalPath.c_str();
+		const char* TmpPath1 = TmpPath.c_str();
+		fp.open(KalPath1, ios::in);
+		tmp.open(TmpPath1, ios::app);
+		int poz1, poz2;
+
+		if (fp.good()) {
+			while (getline(fp, line))
+			{
+				poz1 = posStr(line, ',', 1);
+				poz2 = posStr(line, ',', 2);
+				nazwa2 = line.substr(poz1 + 1, poz2 - poz1 - 1);
+				if (strncmp(nazwa2.c_str(), nazwa1.c_str(), n) != 0)
+				{
+					tmp << line << "\n";
+				}
+			}
+			string core = ws2s(ExePath());
+			string coreFinal;
+			core.pop_back(); core.pop_back();
+			core.pop_back(); core.pop_back();
+			core.pop_back(); core.pop_back();
+			for (int i = 0; i < core.length(); i++)
+			{
+				if (core[i] == '/') {
+					coreFinal.push_back('\\');
+					coreFinal.push_back('\\');
+				}
+				else {
+					coreFinal.push_back(core[i]);
+				}
+
+			}
+			cout << "coreF: " << coreFinal << endl;
+
+			KalPath = coreFinal + ".\\Konta\\" + login + "\\" + nazwa + ".txt";
+			TmpPath = coreFinal + ".\\Konta\\" + login + "\\tmp.txt";
+			KalPath1 = KalPath.c_str();
+			TmpPath1 = TmpPath.c_str();
+
+			fp.close();
+			tmp.close();
+
+			if (remove(KalPath1) != 0)
+				perror("Error removing file\n");
+			else
+				cout << "File removed successfully\n";
+
+			if (rename(TmpPath1, KalPath1) != 0)
+				perror("Error rename file");
+			else
+				cout << "File rename successfully\n";
+
+		}
+		else
+		{
+			cout << "Blad otwarcia pliku\n";
+		}
+	}
 }
 
 

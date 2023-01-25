@@ -31,6 +31,8 @@ public:
 	void wyswietlKalendarze();
 	void wyswietlKonto();
 	string getLogin();
+	void wczytywanieDanych();
+	void usunKonto();
 
 private:
 	string haslo;

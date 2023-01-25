@@ -4,6 +4,7 @@
 #define _CRT_NONSTDC_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS_GLOBALS
 #define _SCL_SECURE_NO_WARNINGS
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 
 #include <iostream>
 #include <fstream>
@@ -13,10 +14,11 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include <direct.h>
+#include <experimental/filesystem>
 
 #include "Zadanie.h";
 #include "Spotkanie.h";
+#include "AplikacjaTerminarz.h"
 
 #define ErrColor 4
 #define ConsColor 3
@@ -29,9 +31,36 @@
 #define KEY_ENTER 13
 #define KEY_ESC 27
 
+using namespace std::experimental::filesystem;
+using namespace std::experimental::filesystem::v1;
+
 using namespace std;
 
 extern AplikacjaTerminarz* app;
+
+inline wstring ExePath() {
+    TCHAR buffer[MAX_PATH] = { 0 };
+    GetModuleFileName(NULL, buffer, MAX_PATH);
+    wstring::size_type pos = wstring(buffer).find_last_of(L"\\/");
+    return wstring(buffer).substr(0, pos);
+}
+
+inline wstring s2ws(const string& str)
+{
+    using convert_typeX = codecvt_utf8<wchar_t>;
+    wstring_convert<convert_typeX, wchar_t> converterX;
+
+    return converterX.from_bytes(str);
+}
+
+inline string ws2s(const wstring& wstr)
+{
+    using convert_typeX = codecvt_utf8<wchar_t>;
+    wstring_convert<convert_typeX, wchar_t> converterX;
+
+    return converterX.to_bytes(wstr);
+}
+
 
 inline void logo() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
@@ -191,6 +220,8 @@ inline int posStr(string wyraz,char znak,int wystapienie)
     return -1;
 }
 
+
+
 inline void logowanie()
 {
     string login, haslo;
@@ -264,6 +295,7 @@ inline char wybor()//key detection - WIP
             //cout << endl << "Right" << endl;  // key right
             break;
         default:
+            option = 'b';
             //cout << endl << (char)ex << endl;  // not arrow
             break;
         }
@@ -335,12 +367,16 @@ inline void menuLogowania()
             }
         }
         option = wybor();
+        while(option =='b')
+        {
+            option = wybor();
+        }
         if (option == 'u') flag++;
         else if (option == 'd')flag--;
     }
 }
 
-inline void menuTermin(Termin* t1)
+inline void menuTermin(Termin* t1,Kalendarz* k1)
 {
     int opcja = 0;
     while (opcja != KEY_ENTER)
@@ -348,7 +384,8 @@ inline void menuTermin(Termin* t1)
         system("CLS");
         cout << "0-Edytuj date\n";
         cout << "1-Wyswietl termin\n";
-        if(t1->getType()==1) cout << "2-Zmien stan\n\n";
+        if(t1->getType()==1) cout << "2-Zmien stan\n";
+        //cout << "3-Wstecz\n\n";
         cin >> opcja;
         cout << "\n\n";
         string nowaData;
@@ -368,6 +405,7 @@ inline void menuTermin(Termin* t1)
                 ((Spotkanie*)t1)->wyswietl();
             else
                 ((Zadanie*)t1)->wyswietl();
+            system("pause");
             break;
         }
         case 2:
@@ -379,6 +417,11 @@ inline void menuTermin(Termin* t1)
 
             cin >> typ;
             ((Zadanie*)t1)->zmienStan((typStanu)typ);
+            break;
+        }
+        case 3:
+        {
+            //menuKalendarz(k1);
             break;
         }
         default:
@@ -396,8 +439,9 @@ inline void menuKalendarz(Kalendarz* k1)
         cout << "0-Dodaj termin\n";
         cout << "1-Wybierz termin\n";
         cout << "2-Wyswietl terminy\n";
-        cout << "3-Usun termin\n\n";
-        cout << "4-Usun termin\n\n";
+        cout << "3-Wyswietl kalendarz\n";
+        cout << "4-Usun termin\n";
+        //cout << "5-Wstecz\n\n";
         cin >> opcja;
         cout << "\n\n";
         string nazwaKal;
@@ -415,7 +459,7 @@ inline void menuKalendarz(Kalendarz* k1)
             cout << "Nazwa terminu: "; cin >> nazwaTerm;
             Termin* t1 = k1->wybierzTermin(nazwaTerm);
             if (t1 != nullptr) {
-
+                menuTermin(t1,k1);
             }
             else {
                 cout << "Wybrany termin nie istnieje\n";
@@ -437,6 +481,14 @@ inline void menuKalendarz(Kalendarz* k1)
         }
         case 4:
         {
+            cout << "Podaj tytul usuwanego terminu: "; cin >> nazwaTerm;
+            k1->usunTermin(nazwaTerm);
+            system("pause");
+            break;
+        }
+        case 5:
+        {
+            //menuTerminarz();
             break;
         }
         default:
@@ -454,7 +506,10 @@ inline void menuTerminarz()
         cout << "0-Dodaj kalendarz\n";
         cout << "1-Wybierz kalendarz\n";
         cout << "2-Wyswietl kalendarze\n";
-        cout << "3-Usun kalendarz\n\n";
+        cout << "3-Usun kalendarz\n";
+        cout << "4-Usun konto\n";
+        cout << "5-Dodaj termin\n";
+        cout << "6-Zamknij\n\n";
         cin >> opcja;
         cout << "\n\n";
         string nazwa;
@@ -488,6 +543,23 @@ inline void menuTerminarz()
         }
         case 3:
         {
+            cout << "Nazwa usuwanego kalendarza: "; cin >> nazwa;
+            app->usunKalendarz(nazwa);
+            break;
+        }
+        case 4:
+        {
+            app->usunKonto();
+            break;
+        }
+        case 5:
+        {
+            app->wybierzKalendarz("Default")->dodajTermin();
+            break;
+        }
+        case 6:
+        {
+            exit(0);
             break;
         }
         default:

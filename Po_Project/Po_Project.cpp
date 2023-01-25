@@ -10,6 +10,7 @@
 #include <cstring>
 #include <filesystem>
 #include <math.h>
+#include <direct.h>
 
 #include "AplikacjaTerminarz.h"
 #include "Kalendarz.h"
@@ -49,6 +50,8 @@ int main()
     }
     //
     logo();
+
+    
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ConsColor);
     cout << "Witamy w aplikacji KalendEX!\n";

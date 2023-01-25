@@ -22,7 +22,7 @@ public:
 	Zadanie();
 	virtual ~Zadanie();
 
-	Zadanie(string opis);
+	Zadanie(string tytul, string data, string opis);
 	void wyswietl();
 	void zmienStan(typStanu stan);
 

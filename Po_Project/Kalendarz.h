@@ -9,6 +9,7 @@
 #define EA_20A53B12_0336_465a_B15E_02961E3D4FD6__INCLUDED_
 
 #include "Termin.h"
+#include "typStanu.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,8 +24,11 @@ public:
 	Termin *m_Termin;
 
 	Kalendarz(string nazwa,string login);
-	void dodajTermin(Termin* termin);
 	void dodajTermin();
+
+	void dodajTermin(int typ, string tytul, string data, string opis, string miejsce); //Spotkanie
+	void dodajTermin(int typ, string tytul, string data, string opis, typStanu stan); //Zadanie
+
 	void usunTermin(string nazwa);
 	Termin* wybierzTermin(string nazwa);
 	void wyswietlKalendarz();

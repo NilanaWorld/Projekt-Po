@@ -1,9 +1,3 @@
-admin,admin
 piotr,g
 Nilana,Nilana
-hhh,hhh
-ff,ff
-u,u
 j,j
-d,d
-k,k

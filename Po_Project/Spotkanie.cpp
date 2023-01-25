@@ -17,7 +17,7 @@ Spotkanie::~Spotkanie(){
 }
 
 
-Spotkanie::Spotkanie(string miejsce,string opis) : Termin::Termin(){
+Spotkanie::Spotkanie(string tytul,string data,string opis,string miejsce) : Termin::Termin(data,tytul,spotkanie){
 	this->miejsce = miejsce;
 	this->opis = opis;
 }
@@ -28,5 +28,5 @@ void Spotkanie::wyswietl(){
 	cout << "Data: " << this->data << "\n";
 	cout << "Rodzaj: " << this->rodzaj << "\n";
 	cout << "Miejsce: " << this->miejsce << "\n";
-	cout << "Opis: " << this->opis << "\n";
+	cout << "Opis: " << this->opis << "\n\n";
 }

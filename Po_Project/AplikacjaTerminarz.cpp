@@ -16,6 +16,8 @@
 #include <filesystem>
 #include <tchar.h>
 #include <experimental/filesystem>
+#include <stdio.h>
+#include <direct.h>
 using namespace std;
 
 using namespace std::experimental::filesystem;
@@ -36,7 +38,80 @@ AplikacjaTerminarz::~AplikacjaTerminarz(){
 
 }
 
+void AplikacjaTerminarz::wczytywanieDanych()
+{
+	//ladowanie danych
+	//lista plikow w folderze
+	string path2 = "./Konta/" + login + "/";
+	string nazwa;
+	string linia, tytul, data, opis, miejsce;
+	int typ, stan;
+	int poz1, poz2;
 
+	//lista kalendarzy
+	for (const auto& entry : directory_iterator(path2))
+	{
+		nazwa = entry.path().generic_string();
+		string path2 = entry.path().generic_string();
+		const char* pathKal = path2.c_str();
+
+		//cout << entry.path().generic_string() << endl;
+		nazwa = nazwa.substr(nazwa.rfind("/") + 1, nazwa.size());
+		nazwa.pop_back();
+		nazwa.pop_back();
+		nazwa.pop_back();
+		nazwa.pop_back();
+
+		//cout << "nazwa: " << nazwa << endl;
+
+		Kalendarz* k1 = new Kalendarz(nazwa, login);
+		this->Kalendarze->push_back(k1);
+
+		//lista terminow
+		fstream fpDKal;
+		fpDKal.open(pathKal, ios::in);//otwieranie kalendarza i pobieranie tresci z niego
+		if (fpDKal.good())
+		{
+			while (getline(fpDKal, linia))
+			{
+				typ = (int)linia[0] - 48;
+				//cout << "typ: " << typ << endl;
+				poz1 = posStr(linia, ',', 1);
+				poz2 = posStr(linia, ',', 2);
+				tytul = linia.substr(poz1 + 1, poz2 - poz1 - 1);
+				//cout << "tytul: " << tytul << endl;
+				poz1 = posStr(linia, ',', 2);
+				poz2 = posStr(linia, ',', 3);
+				data = linia.substr(poz1 + 1, poz2 - poz1 - 1);
+				//cout << "data: " << data << endl;
+				poz1 = posStr(linia, ',', 3);
+				poz2 = posStr(linia, ',', 4);
+				opis = linia.substr(poz1 + 1, poz2 - poz1 - 1);
+				//cout << "opis: " << opis << endl;
+
+
+				if (typ == 0)
+				{
+					poz1 = posStr(linia, ',', 4);
+					poz2 = linia.size();
+					miejsce = linia.substr(poz1 + 1, poz2);
+					//cout << "miejsce: " << miejsce << endl;
+					k1->dodajTermin(typ, tytul, data, opis, miejsce);
+				}
+				else
+				{
+					poz1 = posStr(linia, ',', 4);
+					stan = (int)((linia.substr(poz1 + 1, 1)).c_str()[0]) - 48;
+					//cout << "stan: " << stan << endl;
+					k1->dodajTermin(typ, tytul, data, opis, (typStanu)stan);
+				}
+			}
+		}
+
+		fpDKal.close();
+	}
+	//system("pause");
+}
 
 
 
@@ -53,87 +128,8 @@ AplikacjaTerminarz::AplikacjaTerminarz(string login, string haslo){
 	fpDKal.open(pathKal, ios::app);//tworzenie domyslnego kalendarza jeœli nie istnieje
 	fpDKal.close();
 
-	//ladowanie danych
-	//lista plikow w folderze
-	path2 = "./Konta/" + login + "/";
-	string nazwa;
-	
-
-	//path path{ u8path(u8"bruh.txt") };
-	//string path_string{ path.u8string() };
-
-	//lista kalendarzy
-	for (const auto& entry : directory_iterator(path2))
-	{
-		nazwa = entry.path().generic_string();
-		path2 = entry.path().generic_string();
-		pathKal = path2.c_str();
-
-		cout << entry.path().generic_string() << endl;
-		nazwa = nazwa.substr(nazwa.rfind("/")+1,nazwa.size());
-		nazwa.pop_back();
-		nazwa.pop_back();
-		nazwa.pop_back();
-		nazwa.pop_back();
-
-		cout << "nazwa: " << nazwa<<endl;
-
-		k1 = new Kalendarz(nazwa, login);
-		this->Kalendarze->push_back(k1);
-
-		//lista terminow
-		string linia,tytul,data,opis,miejsce;
-		int typ,stan;
-		int poz1, poz2;
-
-		fpDKal.open(pathKal, ios::in);//otwieranie kalendarza i pobieranie tresci z niego
-		if (fpDKal.good())
-		{
-			while (fpDKal.eof())
-			{
-				getline(fpDKal, linia);
-				typ = linia[0];
-				poz1 = posStr(linia, ',', 1);
-				poz2 = posStr(linia, ',', 2);
-				tytul = linia.substr(poz1 + 1, poz2 - poz1);
-				cout << "tytul: " << tytul << endl;
-				poz1 = posStr(linia, ',', 2);
-				poz2 = posStr(linia, ',', 3);
-				data = linia.substr(poz1 + 1, poz2 - poz1);
-				cout << "data: " << data << endl;
-				poz1 = posStr(linia, ',', 3);
-				poz2 = posStr(linia, ',', 4);
-				opis = linia.substr(poz1 + 1, poz2 - poz1);
-				cout << "opis: " << opis << endl;
-
-
-				if (typ == 0)
-				{
-					poz1 = posStr(linia, ',', 5);
-					poz2 = linia.size();
-					opis = linia.substr(poz1 + 1, poz2);
-					opis.pop_back();
-					cout << "opis: " << opis << endl;
-				}
-				else
-				{
-					poz1 = posStr(linia, ',', 5);
-					poz2 = linia.size();
-					stan = (int)linia.substr(poz1 + 1, poz2).c_str();
-					
-					cout << "stan: " << stan << endl;
-				}
-			}
-		}
-
-		fpDKal.close();
-	}
-
-
-	
-
+	wczytywanieDanych();
 }
-
 
 void AplikacjaTerminarz::dodajKalendarz(string nazwa,string login){
 	Kalendarz* kalendarz = new Kalendarz(nazwa,login);
@@ -147,21 +143,37 @@ void AplikacjaTerminarz::dodajKalendarz(string nazwa,string login){
 }
 
 
-void AplikacjaTerminarz::usunKalendarz(string nazwa){
+void AplikacjaTerminarz::usunKalendarz(string nazwa) {
+	//1.usuwa z listy
+	bool flag=false;
 	Kalendarz* r = nullptr;
 	auto it = find_if(Kalendarze->begin(), Kalendarze->end(), [&](Kalendarz* p)
 		{
 			if (nazwa == p->dajNazwe())
 			{
+				flag = true;
 				r = p;
 				return true;
 			}
-	return false; });
-	Kalendarze->erase(it);
+			return false; });
+	Kalendarze->erase(it);			//	erase sie psuje gdy nie ma kalendarza
 
+	if (flag == false)
+	{
+		cout << "Kalendarz nie istnieje\n";
+	}
+	else
+	{
+		//2.usuwa plik
 
-	//1.usuwa z listy
-	//2.usuwa plik
+		string path2 = "./Konta/" + login + "/" + nazwa + ".txt";
+		const char* pathKal = path2.c_str();
+
+		if (remove(pathKal) != 0)
+			cout << "Error deleting file";
+		else
+			cout << "File successfully deleted\n";
+	}
 }
 
 
@@ -194,4 +206,81 @@ void AplikacjaTerminarz::wyswietlKonto(){
 string AplikacjaTerminarz::getLogin()
 {
 	return login;
+}
+
+void  AplikacjaTerminarz::usunKonto()
+{
+
+	//std::experimental::filesystem::_Remove_dir();
+	
+	fstream fp, tmp;
+	string line,nazwa2;
+	int n = login.length();
+	fp.open("konta.txt", ios::in);
+	tmp.open("tmp.txt", ios::app);
+	int poz1;
+	if (fp.good()) {
+		while (getline(fp, line))
+		{
+			poz1 = posStr(line, ',', 1);
+			nazwa2 = line.substr(0, poz1 );
+			//cout << "N: " << nazwa2 << endl;
+			if (strncmp(nazwa2.c_str(), login.c_str(), n) != 0)
+			{
+				//cout << nazwa2 << " " << login << endl;
+				tmp << line << "\n";
+			}
+		}
+		string core = ws2s(ExePath());
+		string coreFinal;
+		core.pop_back(); core.pop_back();
+		core.pop_back(); core.pop_back();
+		core.pop_back(); core.pop_back();
+		for (int i = 0; i < core.length(); i++)
+		{
+			if (core[i] == '/') {
+				coreFinal.push_back('\\');
+				coreFinal.push_back('\\');
+			}
+			else {
+				coreFinal.push_back(core[i]);
+			}
+
+		}
+		//cout << "coreF: " << coreFinal << endl;
+
+		string KalPath = coreFinal + "\\konta.txt";
+		string TmpPath = coreFinal + "\\tmp.txt";
+		const char* KalPath1 = KalPath.c_str();
+		const char* TmpPath1 = TmpPath.c_str();
+
+		fp.close();
+		tmp.close();
+
+		if (remove(KalPath1) != 0)
+			perror("Error removing file\n");
+		else
+			cout << "File removed successfully\n";
+
+		if (rename(TmpPath1, KalPath1) != 0)
+			perror("Error rename file");
+		else
+			cout << "File rename successfully\n";
+
+		string UPath = coreFinal + "\\Konta\\" + login;
+		const char* UPath1 = UPath.c_str();
+
+		remove_all(UPath);
+
+		if (rmdir(UPath1) == -1)						//usuwanie pustego folderu, z jakiegos powodu wyskakuje blad ale dziala O_o
+		{
+			//perror("Error deleting folder\n");
+		}
+		else
+		{
+			//cout << "Pomyslnie usunieto konto\n";
+		}
+
+		exit(0);
+	}
 }
