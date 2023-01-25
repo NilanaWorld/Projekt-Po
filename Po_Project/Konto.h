@@ -440,7 +440,7 @@ inline void menuKalendarz(Kalendarz* k1)
         cout << "1-Wybierz termin\n";
         cout << "2-Wyswietl terminy\n";
         cout << "3-Wyswietl kalendarz\n";
-        cout << "4-Usun termin\n";
+        cout << "4-Usun termin\n\n";
         //cout << "5-Wstecz\n\n";
         cin >> opcja;
         cout << "\n\n";
